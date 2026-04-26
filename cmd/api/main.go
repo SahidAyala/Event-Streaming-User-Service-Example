@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 
+	appconfig "github.com/SahidAyala/Event-Streaming-User-Service-Example/internal/infrastructure/config"
 	"github.com/SahidAyala/Event-Streaming-User-Service-Example/internal/infrastructure/persistence"
 	"github.com/SahidAyala/Event-Streaming-User-Service-Example/internal/user"
 	"github.com/go-chi/chi/v5"
@@ -18,17 +19,17 @@ import (
 
 func main() {
 	ctx := context.Background()
-	cfg := loadConfig()
+	cfg := appconfig.Load()
 
 	pool, err := persistence.NewPool(ctx, persistence.Config{
-		DSN: cfg.postgresDSN,
+		DSN: cfg.PostgresDSN,
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer pool.Close()
 
-	userModule := user.NewModule(pool, cfg.eventsBaseURL, cfg.eventsAPIKey)
+	userModule := user.NewModule(pool, cfg.EventsBaseURL, cfg.EventsAPIKey)
 
 	r := chi.NewRouter()
 	r.Post("/users", userModule.Handler.CreateUser)
