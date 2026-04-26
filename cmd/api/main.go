@@ -18,16 +18,17 @@ import (
 
 func main() {
 	ctx := context.Background()
+	cfg := loadConfig()
 
 	pool, err := persistence.NewPool(ctx, persistence.Config{
-		DSN: "postgresql://postgres:root@localhost:5432/users", // TODO: mover a .env
+		DSN: cfg.postgresDSN,
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer pool.Close()
 
-	userModule := user.NewModule(pool)
+	userModule := user.NewModule(pool, cfg.eventsBaseURL, cfg.eventsAPIKey)
 
 	r := chi.NewRouter()
 	r.Post("/users", userModule.Handler.CreateUser)
