@@ -5,7 +5,7 @@ import "os"
 const (
 	defaultEventsBaseURL = "http://localhost:8080"
 	defaultEventsAPIKey  = "dev-api-key"
-	defaultPostgresDSN   = "postgresql://postgres:root@localhost:5432/users"
+	defaultPostgresDSN   = "postgresql://postgres:root@localhost:5432/users?sslmode=disable"
 )
 
 type AppConfig struct {
