@@ -1,0 +1,159 @@
+basePath: /
+definitions:
+  userhttp.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  userhttp.UpdateEmailRequest:
+    properties:
+      email:
+        type: string
+    type: object
+  userhttp.UpdatePasswordRequest:
+    properties:
+      current_password:
+        type: string
+      new_password:
+        type: string
+    type: object
+  userhttp.UserResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8082
+info:
+  contact: {}
+  description: API para gestión de usuarios
+  title: User Service API
+  version: "1.0"
+paths:
+  /users:
+    post:
+      consumes:
+        - application/json
+      description: Crea un nuevo usuario en el sistema
+      parameters:
+        - description: Datos del usuario
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/userhttp.CreateUserRequest"
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: "#/definitions/userhttp.UserResponse"
+        "400":
+          description: Solicitud inválida
+          schema:
+            type: string
+      summary: Crear usuario
+      tags:
+        - users
+  /users/{id}:
+    get:
+      description: Retorna un usuario dado su ID
+      parameters:
+        - description: ID del usuario
+          in: path
+          name: id
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/userhttp.UserResponse"
+        "400":
+          description: ID faltante
+          schema:
+            type: string
+        "404":
+          description: Usuario no encontrado
+          schema:
+            type: string
+      summary: Obtener usuario por ID
+      tags:
+        - users
+  /users/{id}/email:
+    patch:
+      consumes:
+        - application/json
+      description: Actualiza el email de un usuario
+      parameters:
+        - description: ID del usuario
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: Nuevo email
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/userhttp.UpdateEmailRequest"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/userhttp.UserResponse"
+        "400":
+          description: Solicitud inválida
+          schema:
+            type: string
+        "404":
+          description: Usuario no encontrado
+          schema:
+            type: string
+      summary: Actualizar email
+      tags:
+        - users
+  /users/{id}/password:
+    patch:
+      consumes:
+        - application/json
+      description: Actualiza la contraseña de un usuario verificando la actual
+      parameters:
+        - description: ID del usuario
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: Contraseñas
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/userhttp.UpdatePasswordRequest"
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Solicitud inválida
+          schema:
+            type: string
+        "404":
+          description: Usuario no encontrado
+          schema:
+            type: string
+      summary: Actualizar contraseña
+      tags:
+        - users
+swagger: "2.0"

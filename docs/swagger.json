@@ -1,0 +1,223 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API para gestión de usuarios",
+    "title": "User Service API",
+    "contact": {},
+    "version": "1.0"
+  },
+  "host": "localhost:8082",
+  "basePath": "/",
+  "paths": {
+    "/users": {
+      "post": {
+        "description": "Crea un nuevo usuario en el sistema",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["users"],
+        "summary": "Crear usuario",
+        "parameters": [
+          {
+            "description": "Datos del usuario",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userhttp.CreateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/userhttp.UserResponse"
+            }
+          },
+          "400": {
+            "description": "Solicitud inválida",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "description": "Retorna un usuario dado su ID",
+        "produces": ["application/json"],
+        "tags": ["users"],
+        "summary": "Obtener usuario por ID",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "ID del usuario",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/userhttp.UserResponse"
+            }
+          },
+          "400": {
+            "description": "ID faltante",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/email": {
+      "patch": {
+        "description": "Actualiza el email de un usuario",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["users"],
+        "summary": "Actualizar email",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "ID del usuario",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Nuevo email",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userhttp.UpdateEmailRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/userhttp.UserResponse"
+            }
+          },
+          "400": {
+            "description": "Solicitud inválida",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/password": {
+      "patch": {
+        "description": "Actualiza la contraseña de un usuario verificando la actual",
+        "consumes": ["application/json"],
+        "tags": ["users"],
+        "summary": "Actualizar contraseña",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "ID del usuario",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Contraseñas",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userhttp.UpdatePasswordRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Solicitud inválida",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "userhttp.CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "userhttp.UpdateEmailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "userhttp.UpdatePasswordRequest": {
+      "type": "object",
+      "properties": {
+        "current_password": {
+          "type": "string"
+        },
+        "new_password": {
+          "type": "string"
+        }
+      }
+    },
+    "userhttp.UserResponse": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

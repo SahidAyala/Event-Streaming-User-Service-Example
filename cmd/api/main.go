@@ -1,7 +1,7 @@
 // @title           User Service API
 // @version         1.0
 // @description     API para gestión de usuarios
-// @host            localhost:8081
+// @host            localhost:8082
 // @BasePath        /
 
 package main
@@ -11,10 +11,12 @@ import (
 	"log"
 	"net/http"
 
+	_ "github.com/SahidAyala/Event-Streaming-User-Service-Example/docs"
 	appconfig "github.com/SahidAyala/Event-Streaming-User-Service-Example/internal/infrastructure/config"
 	"github.com/SahidAyala/Event-Streaming-User-Service-Example/internal/infrastructure/persistence"
 	"github.com/SahidAyala/Event-Streaming-User-Service-Example/internal/user"
 	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func main() {
@@ -36,7 +38,8 @@ func main() {
 	r.Get("/users/{id}", userModule.Handler.GetUserById)
 	r.Patch("/users/{id}/email", userModule.Handler.UpdateEmail)
 	r.Patch("/users/{id}/password", userModule.Handler.UpdatePassword)
+	r.Get("/swagger/*", httpSwagger.WrapHandler)
 
-	log.Println("Server running on: 8081")
-	log.Fatal(http.ListenAndServe(":8081", r))
+	log.Println("Server running on: 8082")
+	log.Fatal(http.ListenAndServe(":8082", r))
 }
